@@ -30,7 +30,7 @@ public class User {
     private String lastName;
 
     @Enumerated(EnumType.STRING)
-    private final UserRole role = UserRole.USER;
+    private static final UserRole role = UserRole.USER;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

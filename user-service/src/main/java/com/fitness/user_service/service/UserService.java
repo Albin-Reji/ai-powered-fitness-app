@@ -6,12 +6,16 @@ import com.fitness.user_service.exception.EmailAlreadyExistException;
 import com.fitness.user_service.exception.UserNotFoundException;
 import com.fitness.user_service.model.User;
 import com.fitness.user_service.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserService {
 
     UserRepository userRepository;
+    private static final Logger log= LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
