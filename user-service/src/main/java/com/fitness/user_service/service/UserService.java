@@ -6,9 +6,10 @@ import com.fitness.user_service.exception.EmailAlreadyExistException;
 import com.fitness.user_service.exception.UserNotFoundException;
 import com.fitness.user_service.model.User;
 import com.fitness.user_service.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-
+@Slf4j
 @Service
 public class UserService {
 
@@ -60,6 +61,7 @@ public class UserService {
     }
 
     public Boolean validateUserId(String userId) {
+        log.info("Calling UserId Validation Method:: userId : {}", userId);
         return userRepository.existsById(userId);
     }
 }
