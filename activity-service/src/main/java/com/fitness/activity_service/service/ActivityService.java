@@ -3,6 +3,7 @@ package com.fitness.activity_service.service;
 import com.fitness.activity_service.dto.ActivityRequest;
 import com.fitness.activity_service.dto.ActivityResponse;
 import com.fitness.activity_service.exception.InvalidActivityId;
+import com.fitness.activity_service.exception.UserNotFoundException;
 import com.fitness.activity_service.model.Activity;
 import com.fitness.activity_service.repository.ActivityRepository;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,16 @@ import java.util.stream.Collectors;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final UserValidationService userValidationService;
 
     public ActivityResponse trackActivity(ActivityRequest request) {
+
+        boolean isValidUser=userValidationService.validateUser(request.getUserId());
+
+        if(!isValidUser){
+            throw new UserNotFoundException("User Not Found Exception :"+request.getUserId());
+        }
+
         Activity activity=Activity.builder()
                 .userId(request.getUserId())
                 .type(request.getType())
