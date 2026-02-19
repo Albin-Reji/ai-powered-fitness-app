@@ -1,4 +1,4 @@
-package com.fitness.activity_service.config;
+package com.fitness.ai_service.config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -12,39 +12,41 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfig {
 
-    @Value("${rabbitmq.exchange.name}")
-    private String exchange;
     @Value("${rabbitmq.queue.name}")
     private String queue;
-    @Value("${rabbitmq.routing.key}")
-    private String routingKey;
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Value("${rabbitmq.route.key}")
+    private String routeKey;
 
     @Bean
-    public Queue activityQueue() {
+    public Queue queue(){
         return new Queue(queue, true);
     }
 
     @Bean
-    public DirectExchange activityExchange() {
+    public DirectExchange exchange(){
         return new DirectExchange(exchange);
     }
 
     @Bean
-    public Binding activityBinding(Queue activityQueue, DirectExchange activityExchange) {
-        return BindingBuilder.bind(activityQueue).to(activityExchange).with(routingKey);
+    public Binding binding(){
+        return  BindingBuilder.bind(queue())
+                .to(exchange())
+                .with(routeKey);
     }
-
     @Bean
-    public MessageConverter jsonMessageConverter() {
+    public MessageConverter messageConverter(){
         return new Jackson2JsonMessageConverter();
     }
 
     @Bean
     public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory){
         RabbitTemplate rabbitTemplate=new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        rabbitTemplate.setMessageConverter(messageConverter());
         return rabbitTemplate;
     }
-
 
 }
