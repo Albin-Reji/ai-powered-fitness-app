@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="true" type="CompoundRunConfigurationType">
+    <toRun name="ActivityServiceApplication" type="Application" />
+    <toRun name="AiServiceApplication" type="Application" />
+    <toRun name="ConfigServerApplication" type="Application" />
+    <toRun name="GatewayApplication" type="Application" />
+    <toRun name="UserServiceApplication" type="Application" />
+    <method v="2" />
+  </configuration>
+</component>

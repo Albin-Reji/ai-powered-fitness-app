@@ -25,10 +25,5 @@ rabbitmq:
   routing:
     key: activity.tracking
 
-gemini:
-  api:
-    ur: ${GEMINI_API_URL}
-    key: ${GEMINI_API_KEY}
-
 
 
