@@ -26,6 +26,7 @@ public class UserService {
         return UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .keyCloakId(user.getKeyCloakId())
                 .password(user.getPassword())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -36,13 +37,25 @@ public class UserService {
 
     public UserResponse register(RegisterRequest request) {
         if(userRepository.existsByEmail(request.getEmail())){
-            throw new EmailAlreadyExistException("Email Exist Already");
+            User existingUser=userRepository.findByEmail(request.getEmail());
+            /* return UseResponse*/
+            return UserResponse.builder()
+                               .id(existingUser.getId())
+                               .keyCloakId(existingUser.getKeyCloakId())
+                               .email(existingUser.getEmail())
+                               .password(existingUser.getPassword())
+                               .firstName(existingUser.getFirstName())
+                               .lastName(existingUser.getLastName())
+                               .createdAt(existingUser.getCreatedAt())
+                               .updatedAt(existingUser.getUpdatedAt())
+                               .build();
         }
 
 
         User user= User.builder()
                 .email(request.getEmail())
                 .password(request.getPassword())
+                .keyCloakId(request.getKeyCloakId())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .build();
@@ -51,6 +64,7 @@ public class UserService {
         /* return UseResponse*/
         return UserResponse.builder()
                 .id(savedUser.getId())
+                .keyCloakId(savedUser.getKeyCloakId())
                 .email(savedUser.getEmail())
                 .password(savedUser.getPassword())
                 .firstName(savedUser.getFirstName())
@@ -64,4 +78,8 @@ public class UserService {
         log.info("Calling UserId Validation Method:: userId : {}", userId);
         return userRepository.existsById(userId);
     }
+
+	public Boolean existByKeyCloakId(String keyCloakId) {
+        return userRepository.existsByKeyCloakId(keyCloakId);
+	}
 }
