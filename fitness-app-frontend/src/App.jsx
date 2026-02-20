@@ -1,14 +1,26 @@
-
-import { Button } from '@mui/material';
+import { Button, Box } from '@mui/material';
 import './App.css'
-import { BrowserRouter as Router, Navigate, Route, Routes, useLocation } from "react-router";
-import { useContext, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext } from 'react-oauth2-code-pkce';
 import { useDispatch } from 'react-redux';
 import { setCredential } from './store/authSlice';
+import ActivityForm from './components/ActivityForm';
+import ActivityList from './components/ActivityList';
+import ActivityDetail from './components/ActivityDetail';
+import { useContext, useState, useEffect } from 'react';
+
+const ActivitiesPage = () => {
+  return (
+    <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
+      <ActivityForm onActivitesAdded={() => window.location.reload()} />
+      <ActivityList />
+    </Box>
+  );
+}
 
 function App() {
-  const { token, tokenData, logIn, logOut, isAuthenticated } = useContext(AuthContext);
+
+  const { token, tokenData, logIn } = useContext(AuthContext);
   const dispatch = useDispatch();
   const [authReady, setAuthReady] = useState(false);
 
@@ -21,21 +33,34 @@ function App() {
 
   return (
     <Router>
-      {!token ?(
-        <Button variant='contained' color='#dc004e'
-        onClick={() => {
-          logIn();
-        }}>Login</Button>
-      ):(
-        <div>
-          <pre>{JSON.stringify(tokenData, null, 2)}</pre>
-          <br></br>
-           <pre>{JSON.stringify(token, null, 2)}</pre>
-        </div>
+
+      {!token ? (
+        <Button
+          variant="contained"
+          onClick={() => logIn()}
+        >
+          Login
+        </Button>
+      ) : (
+
+        <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
+          <Routes>
+
+            <Route path="/activities" element={<ActivitiesPage />} />
+            <Route path="/activities/:id" element={<ActivityDetail />} />
+
+            <Route
+              path="/"
+              element={<Navigate to="/activities" replace />}
+            />
+
+          </Routes>
+        </Box>
+
       )}
+
     </Router>
   )
-
 }
 
-export default App
+export default App;
