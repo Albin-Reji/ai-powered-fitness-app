@@ -8,5 +8,6 @@ public enum ActivityType {
     WEIGHT_TRAINING,
     YOGA,
     CARDIO,
-    SPORTS
+    SPORTS,
+    RIDING
 }

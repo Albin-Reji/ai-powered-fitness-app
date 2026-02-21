@@ -3,11 +3,13 @@ package com.fitness.activity_service.controller;
 import com.fitness.activity_service.dto.ActivityRequest;
 import com.fitness.activity_service.dto.ActivityResponse;
 import com.fitness.activity_service.service.ActivityService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/activities")
 public class ActivityController {
@@ -28,6 +30,7 @@ public class ActivityController {
     }
     @GetMapping("/")
     public ResponseEntity<List<ActivityResponse>> getUserActivity(@RequestHeader("X-User-ID") String userId){
+        log.info("X-USER-ID ActivityController: {}", userId);
         return ResponseEntity.ok(activityService.getUserActivity(userId));
     }
 

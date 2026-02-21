@@ -3,7 +3,7 @@ import './App.css'
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext } from 'react-oauth2-code-pkce';
 import { useDispatch } from 'react-redux';
-import { setCredential } from './store/authSlice';
+import { setCredential, logout } from './store/authSlice';
 import ActivityForm from './components/ActivityForm';
 import ActivityList from './components/ActivityList';
 import ActivityDetail from './components/ActivityDetail';
@@ -20,9 +20,16 @@ const ActivitiesPage = () => {
 
 function App() {
 
-  const { token, tokenData, logIn } = useContext(AuthContext);
+  const { token, tokenData, logIn, logOut } = useContext(AuthContext);
   const dispatch = useDispatch();
   const [authReady, setAuthReady] = useState(false);
+
+  // logout code
+
+  const handleLogout = () => {
+    dispatch(logout());
+    logOut();
+  }
 
   useEffect(() => {
     if (token) {
@@ -35,26 +42,35 @@ function App() {
     <Router>
 
       {!token ? (
-        <Button
-          variant="contained"
-          onClick={() => logIn()}
-        >
-          Login
-        </Button>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+
+          <Button variant="contained" onClick={() => logIn()}>
+            Login
+          </Button>
+
+
+        </Box>
+
       ) : (
 
         <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
-          <Routes>
 
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleLogout}
+            sx={{ mb: 2 }}
+          >
+            Logout
+          </Button>
+
+          <Routes>
             <Route path="/activities" element={<ActivitiesPage />} />
             <Route path="/activities/:id" element={<ActivityDetail />} />
-
-            <Route
-              path="/"
-              element={<Navigate to="/activities" replace />}
-            />
-
+            <Route path="/" element={<Navigate to="/activities" replace />} />
           </Routes>
+
         </Box>
 
       )}
